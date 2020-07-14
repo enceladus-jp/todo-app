@@ -5,6 +5,7 @@
  *       mis-type
  */
 export const CREATE_TODO = "CREATE_TODO";
+export const DELETE_TODO = "DELETE_TODO";
 
 // Action interfaces are here
 /**
@@ -16,6 +17,11 @@ interface CreateTodo {
   payload: string;
 }
 
+interface DeleteTodo {
+  type: typeof DELETE_TODO;
+  payload: number;
+}
+
 // Union type here
 // TODO: other types
 /**
@@ -24,7 +30,7 @@ interface CreateTodo {
  *  Opinion: Union types are very convenient to use, not only in React/Redux. This is
  *      a good way to avoid `any` type. You can check Typescript site for details of this
  */
-export type TodoActionTypes = CreateTodo;
+export type TodoActionTypes = CreateTodo | DeleteTodo;
 
 // Actual action object/function here
 /**
@@ -36,4 +42,13 @@ export type TodoActionTypes = CreateTodo;
 export const createTodo = (textContent: string): TodoActionTypes => ({
   type: CREATE_TODO,
   payload: textContent
+});
+
+/**
+ * delete todo
+ * @param idx Todo's index
+ */
+export const deleteTodo = (idx: number): TodoActionTypes => ({
+  type: DELETE_TODO,
+  payload: idx
 });

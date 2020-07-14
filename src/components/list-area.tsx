@@ -1,7 +1,12 @@
 import React from "react";
 import { Todo } from "../redux/reducers/TodoReducer";
+import { deleteTodo } from "../redux/actions/Todo";
+import { connect } from "react-redux";
 
-type ListAreaComponentProps = {};
+type ListAreaComponentProps = {
+  todo: Todo[];
+  deleteTodo: Function;
+};
 
 /**
  * TODO:
@@ -10,33 +15,29 @@ type ListAreaComponentProps = {};
  */
 
 const ListAreaComponent = (props: ListAreaComponentProps) => {
+
   function renderListArea() {
     // Mock data source
-    // FIXME: remove when ready to link to store
-    const mockList: Todo[] = [
-      { contentText: "hoge", isDone: false },
-      { contentText: "foo", isDone: true }
-    ];
+    const todoList: Todo[] = props.todo;
 
     // array of li items
     //      p element
     //      checkbox element
     // Actual implementation
     const itemList = [];
-    let i = 0;
-    for (const mockItem of mockList) {
-      if (!mockItem.contentText) {
+    for (let i = 0; i < todoList.length; i++) {
+      if (!todoList[i].contentText) {
         continue;
       }
       itemList.push(
         <li key={i}>
-          <span>{mockItem.contentText}</span>
+          <span>{todoList[i].contentText}</span>
           <span>
-            <input type="checkbox" checked={mockItem.isDone} />
+            <input type="checkbox" defaultChecked={todoList[i].isDone} />
           </span>
+          <button onClick={() => {props.deleteTodo(i)}}>Delete</button>
         </li>
       );
-      i++;
     }
 
     return <ul>{itemList}</ul>;
@@ -44,4 +45,12 @@ const ListAreaComponent = (props: ListAreaComponentProps) => {
   return renderListArea();
 };
 
-export default ListAreaComponent;
+const mapStateToProps = (state: any) => {
+  return {todo: state.todo};
+}
+
+const mapDispatchToProps = (dispatch: Function) => ({
+  deleteTodo: (idx: number) => dispatch(deleteTodo(idx))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListAreaComponent);

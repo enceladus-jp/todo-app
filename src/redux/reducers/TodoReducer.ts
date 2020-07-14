@@ -1,4 +1,4 @@
-import { TodoActionTypes, CREATE_TODO } from "../actions/Todo";
+import { TodoActionTypes, CREATE_TODO, DELETE_TODO } from "../actions/Todo";
 // Opinion: object/array cloning convenience
 import cloneDeep from "lodash.clonedeep";
 
@@ -46,6 +46,9 @@ export function todoReducer(
         contentText: action.payload
       });
       // Always return new object so Redux (and its helpers) will know that a new state is available
+      return cloneDeep(state);
+    case DELETE_TODO:
+      state.splice(action.payload, 1);
       return cloneDeep(state);
     default:
       // Always have a default state that returns the original state
